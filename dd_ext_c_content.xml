@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.8.1" type="plugin" group="dd_gmaps_locations" method="upgrade">
+    <name>plg_dd_gmaps_locations_dd_ext_c_content</name>
+    <creationDate>07.10.2017</creationDate>
+    <author>HR IT-Solutions Florian Häusler</author>
+    <authorEmail>info@hr-it-solutions.com</authorEmail>
+    <authorUrl>https://www.hr-it-solutions.com</authorUrl>
+    <copyright>Copyright (C) 2017 - 2017 Didldu e.K. | HR IT-Solutions</copyright>
+    <license>GNU/GPLv2 only</license>
+    <version>1.0.0.0</version>
+    <description>PLG_DD_GMAPS_LOCATIONS_DD_EXT_C_CONTENT_XML_DESCRIPTION</description>
+    <files>
+        <filename plugin="dd_ext_c_content">dd_ext_c_content.php</filename>
+        <folder>language</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_dd_gmaps_locations_dd_ext_c_content.sys.ini</language>
+        <language tag="de-DE">language/de-DE/de-DE.plg_dd_gmaps_locations_dd_ext_c_content.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                        name="launchInfoWindow"
+                        type="radio"
+                        default="0"
+                        label="PLG_DD_GMAPS_LOCATIONS_DD_EXT_C_CONTENT_TRIGGER_LAUNCHINFOWINDOW_LABEL"
+                        description="PLG_DD_GMAPS_LOCATIONS_DD_EXT_C_CONTENT_TRIGGER_LAUNCHINFOWINDOW_DESC"
+                        class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
