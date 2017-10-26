@@ -61,11 +61,26 @@ class PlgDD_GMaps_LocationsDD_Ext_C_Content extends JPlugin
 		 * */
 		if ($extc_plugin === 'com_content')
 		{
-			foreach ($results as $key => $result)
+			if ($this->params->get('helperRouteArticle'))
 			{
-				if ($result->ext_c_id !== '0')
+				$results = $this->bindArticleParamsForHelperRoute($results);
+
+				foreach ($results as $key => $result)
 				{
-					$results[$key]->extc_link = 'index.php?option=com_content&view=article&id=' . $result->ext_c_id;
+					if ($result->ext_c_id !== '0')
+					{
+						$results[$key]->extc_link = ContentHelperRoute::getArticleRoute($result->ext_c_id . '-' . $results[$key]->ext_c_alias, $results[$key]->ext_c_catid);
+					}
+				}
+			}
+			else
+			{
+				foreach ($results as $key => $result)
+				{
+					if ($result->ext_c_id !== '0')
+					{
+						$results[$key]->extc_link = 'index.php?option=com_content&view=article&id=' . $result->ext_c_id;
+					}
 				}
 			}
 
@@ -75,5 +90,42 @@ class PlgDD_GMaps_LocationsDD_Ext_C_Content extends JPlugin
 		{
 			return $results;
 		}
+	}
+
+	/**
+	 * bindArticleParamsForHelperRoute
+	 *
+	 * Bind (ext_c_alias, ext_c_catid) from #__content (alias, catid) to results locations
+	 * This params are needed for ContentHelperRoute::getArticleRoute
+	 *
+	 * @param   object  $results  the locations
+	 *
+	 * @return  object
+	 */
+	private function bindArticleParamsForHelperRoute($results)
+	{
+		$ext_c_ids = [];
+
+		foreach ($results as $key => $result)
+		{
+			$ext_c_ids[] = $results[$key]->ext_c_id;
+		}
+
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn(array('id','alias', 'catid')))
+			->from($db->qn('#__content'))
+			->where($db->qn('id') . ' IN (' . implode(', ', $ext_c_ids) . ')');
+		$db->setQuery($query);
+
+		$contentParams = $db->loadObjectList('id');
+
+		foreach ($results as $key => $result)
+		{
+			$results[$key]->ext_c_alias = $contentParams[$results[$key]->ext_c_id]->alias;
+			$results[$key]->ext_c_catid = $contentParams[$results[$key]->ext_c_id]->catid;
+		}
+
+		return $results;
 	}
 }
